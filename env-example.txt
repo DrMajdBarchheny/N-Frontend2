@@ -1,0 +1,16 @@
+# EmailJS Configuration
+# Copy this content to .env.local and replace with your actual values
+
+# Get these values from your EmailJS dashboard
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_zv91ic6
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=template_ixf1bxt
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=UJbFzMN0aj_ib3mlb
+
+# Instructions:
+# 1. Go to EmailJS.com and create an account
+# 2. Set up an email service (Gmail, Outlook, etc.)
+# 3. Create an email template
+# 4. Copy your Service ID, Template ID, and Public Key
+# 5. Replace the values above with your actual credentials
+# 6. Create a file named .env.local in your project root
+# 7. Paste this content into .env.local with your real values 
