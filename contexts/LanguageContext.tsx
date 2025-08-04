@@ -1,0 +1,747 @@
+"use client"
+
+import type React from "react"
+import { createContext, useContext, useState, useEffect } from "react"
+
+type Language = "en" | "ar"
+
+interface LanguageContextType {
+  language: Language
+  setLanguage: (lang: Language) => void
+  t: (key: string) => string
+  isRTL: boolean
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    // Navigation
+    "nav.HomePage": "NIJARA",
+    "nav.work": "OUR WORK",
+    "nav.models": "3D MODELS",
+    "nav.rental": "RENTAL CATALOG",
+    "nav.team": "OUR TEAM",
+    "nav.clients": "CLIENTS",
+    "nav.contact": "CONTACT",
+    "nav.login": "LOGIN",
+    "nav.signup": "SIGN UP",
+    "nav.requestDesign": "REQUEST DESIGN",
+    "nav.logout": "Logout",
+    "nav.whatWeDo": "WHAT WE DO",
+
+    // Hero Section
+    "hero.subtitle": "EXHIBITION DESIGN",
+    "hero.title": "WE GET",
+    "hero.title2": "IT DONE",
+    "hero.title3": "redefined",
+    "hero.description":
+      "Your Partner in Exhibition Design, Interior Fit-Out & Event Experience.",
+      
+    "hero.cta": "EXPLORE 3D MODELS",
+
+    // Services Section
+    "services.subtitle": "OUR EXPERTISE",
+    "services.title1": "WHAT",
+    "services.title2": "WE",
+    "services.title3": "DO",
+    "services.exhibition": "Exhibition Stand Design, Build & Contractor",
+    "services.tradeshows": "Tradeshows, Conferences & Events",
+    "services.interior": "Interior Design and Fit-Out",
+    "services.strategy": "Strategy, Management & Activation",
+    "services.exhibition.title": "Exhibition Design",
+    "services.exhibition.description":
+      "Custom exhibition stands that captivate and engage your audience with innovative spatial design.",
+    "services.interior.title": "Interior Fit-Out",
+    "services.interior.description":
+      "Complete interior solutions for commercial and retail spaces that reflect your brand identity.",
+    "services.event.title": "Event Management",
+    "services.event.description": "End-to-end event planning and execution services for memorable brand experiences.",
+
+    // 3D Models Section
+    "models.subtitle": "3D EXHIBITION MODELS",
+    "models.title1": "Interactive",
+    "models.title2": "3D Previews",
+    "models.description":
+      "Explore our exhibition designs in immersive 3D. Rotate, zoom, and interact with detailed models of our work.",
+    "models.selectModel": "Select Model",
+    "models.controls": "3D Controls",
+    "models.autoRotate": "Auto Rotate",
+    "models.mouseControls": "Mouse Controls",
+    "models.on": "On",
+    "models.off": "Off",
+    "models.navigation": "How to Navigate",
+    "models.leftClick": "Left click + drag to rotate",
+    "models.rightClick": "Right click + drag to pan",
+    "models.scroll": "Scroll wheel to zoom",
+    "models.cta": "Ready to bring your vision to life in 3D?",
+    "models.ctaButton": "Request 3D Visualization",
+
+    // Portfolio Section
+    "portfolio.subtitle": "PORTFOLIO",
+    "portfolio.title1": "Our latest",
+    "portfolio.title2": "projects",
+    "portfolio.viewProject": "View Project",
+
+    // Stats Section
+    "stats.projects": "Projects Completed",
+    "stats.experience": "Years Experience",
+    "stats.clients": "Happy Clients",
+    "stats.team": "Team Members",
+
+    // Team Section
+    "team.subtitle": "OUR",
+    "team.subtitle2": "TEAM",
+
+    "team.title1": "Meet our",
+    "team.title2": "experts",
+    "team.description":
+      "Our diverse team of creative professionals brings together decades of experience in exhibition design, architecture, and project management.",
+    "team.allDepartments": "All Departments",
+    "team.leadership": "Leadership",
+    "team.design": "Design",
+    "team.technology": "Technology",
+    "team.operations": "Operations",
+    "team.business": "Business",
+    "team.featured": "Featured Team",
+    "team.allTeam": "All Team",
+    "team.yearsExp": "years experience",
+    "team.email": "Email",
+    "team.linkedin": "LinkedIn",
+    "team.phone": "Phone",
+    "team.joinTeam": "Join Our Team",
+    "team.joinDescription": "We're always looking for talented individuals to join our growing team.",
+    "team.viewCareers": "View Career Opportunities",
+
+    // Clients Section
+    "clients.subtitle": "OUR CLIENTS",
+    "clients.title1": "Trusted by",
+    "clients.title2": "industry leaders",
+    "clients.description":
+      "We've had the privilege of working with some of the most prestigious brands and organizations across various industries.",
+    "clients.allIndustries": "All Industries",
+    "clients.aviation": "Aviation",
+    "clients.government": "Government",
+    "clients.energy": "Energy",
+    "clients.events": "Events",
+    "clients.technology": "Technology",
+    "clients.healthcare": "Healthcare",
+    "clients.featured": "Featured Clients",
+    "clients.allClients": "All Clients",
+    "clients.partnership": "Partnership since",
+    "clients.projectValue": "Project Value",
+    "clients.becomePartner": "Become a Partner",
+    "clients.partnerDescription":
+      "Join our network of satisfied clients and experience excellence in exhibition design.",
+    "clients.getStarted": "Get Started Today",
+
+    // Contact Section
+    "contact.title1": "Ready to create",
+    "contact.title2": "something amazing?",
+    "contact.description":
+      "Let's discuss your next exhibition, interior project, or event. Our team is ready to bring your vision to life with cutting-edge 3D visualization and premium rental equipment.",
+    "contact.startProject": "Start Your Project",
+    "contact.browseCatalog": "Browse Our Work",
+
+    // Footer
+    "footer.description":
+      "Creating extraordinary experiences through innovative design and exceptional execution since 2006.",
+    "footer.services": "Services",
+    "footer.company": "Company",
+    "footer.contact": "Contact",
+    "footer.copyright": "© 2025 Nijara. All rights reserved.",
+    "footer.exhibition": "Exhibition Stand Design",
+    "footer.interior": "Interior Fit-Out & Design",
+    "footer.event": "Strategy, Management & Activation",
+    "footer.tradeshow": "Tradeshows, Conferences & Events",
+    "footer.about": "About Us",
+    "footer.projects": "Projects",
+    "footer.team": "Our Team",
+    "footer.downloadProfile": "Download Company Profile",
+    "footer.careers": "Careers",
+    "footer.address": "Gulf Leighton 01 Compound -9B St-Al Quoz-Al Quoz Industrial Area 4 - Dubai - United Arab Emirates",
+    "footer.phone": "+971 4 3415581",
+    "footer.email": "info@nijara.com",
+    "footer.whatwedo": "What We Do",
+
+    // Request Design Form
+    "requestDesign.title": "Request a Design",
+    "requestDesign.subtitle": "PROJECT CONSULTATION",
+    "requestDesign.description":
+      "Tell us about your project and let our experts create the perfect design solution for you.",
+    "requestDesign.name": "Full Name",
+    "requestDesign.namePlaceholder": "Enter your full name",
+    "requestDesign.company": "Company",
+    "requestDesign.companyPlaceholder": "Company name ",
+    "requestDesign.phone": "Phone Number",
+    "requestDesign.phonePlaceholder": "Enter your phone number",
+    "requestDesign.email": "Email Address",
+    "requestDesign.emailPlaceholder": "Enter your email address",
+    "requestDesign.eventType": "Type of Event/Project",
+    "requestDesign.eventTypePlaceholder": "Select event type",
+    "requestDesign.eventDate": "Event Date",
+    "requestDesign.eventDatePlaceholder": "Select event date",
+
+    "requestDesign.descriptionPlaceholder": "Describe your project requirements, goals, and any specific details...",
+    "requestDesign.fileUpload": "Upload Files",
+    "requestDesign.fileUploadDescription": "Upload reference images, floor plans, or any relevant documents",
+    "requestDesign.dragDrop": "Drag and drop files here, or click to browse",
+    "requestDesign.fileTypes": "Supported formats: PDF, JPG, PNG, DOC, DOCX (Max 10MB each)",
+    "requestDesign.submit": "Submit Request",
+    "requestDesign.submitting": "Submitting...",
+    "requestDesign.success": "Request submitted successfully! We'll get back to you within 24 hours.",
+    "requestDesign.error": "Something went wrong. Please try again.",
+
+    // Event Types
+    "eventTypes.exhibition": "Exhibition Stand",
+    "eventTypes.conference": "Conference",
+    "eventTypes.tradeShow": "Trade Show",
+    "eventTypes.corporate": "Corporate Event",
+    "eventTypes.retail": "Retail Space",
+    "eventTypes.museum": "Museum Display",
+    "eventTypes.showroom": "Showroom",
+    "eventTypes.other": "Other",
+
+    // Common
+    "common.loading": "Loading...",
+    "common.error": "Error",
+    "common.success": "Success",
+    "common.cancel": "Cancel",
+    "common.save": "Save",
+    "common.edit": "Edit",
+    "common.delete": "Delete",
+    "common.view": "View",
+    "common.close": "Close",
+    "common.next": "Next",
+    "common.previous": "Previous",
+    "common.required": "Required",
+    "common.optional": "Optional",
+
+    // Who We Are Section
+    "whoWeAre.title1": "WHO",
+    "whoWeAre.title2": "WE",
+    "whoWeAre.title3": "ARE",
+    "whoWeAre.designExcellence": "Design centre of excellence",
+    "whoWeAre.customerOriented": "Customer Oriented",
+    "whoWeAre.reliablePartner": "Reliable Partner",
+    "whoWeAre.timeBound": "Time Bound",
+
+    // About Us Section
+    "aboutUs.ourJourney": "OUR JOURNEY",
+    "aboutUs.about": "ABOUT",
+    "aboutUs.nijara": "NIJARA",
+    "aboutUs.intro": "Nijara, established in 2006, is a leading agency in exhibition stand design, interior fit-outs, and event management. They specialize in creating stunning, budget-friendly exhibition stands and organizing innovative events and conferences. Nijara also offers full fit-out solutions for offices, residences, and special occasions, using high-quality materials and custom designs to bring clients’ visions to life.",
+    "aboutUs.2015.title": "Foundation & Vision",
+    "aboutUs.2015.desc": "Nijara was established with a clear vision to revolutionize the exhibition and event industry in the Middle East.",
+    "aboutUs.2015.ach1": "Company establishment in Dubai",
+    "aboutUs.2015.ach2": "First exhibition design project",
+    "aboutUs.2015.ach3": "Team of 5 creative professionals",
+    "aboutUs.2015.ach4": "Initial client base of 10 companies",
+    "aboutUs.2016.title": "Expansion & Growth",
+    "aboutUs.2016.desc": "Nijara expanded its operations to include interior design and event management, establishing a comprehensive service offering.",
+    "aboutUs.2016.ach1": "Expansion to new office in Dubai",
+    "aboutUs.2016.ach2": "Launch of interior design department",
+    "aboutUs.2016.ach3": "Team growth to 15 professionals",
+    "aboutUs.2016.ach4": "Client base growth to 20 companies",
+    "aboutUs.2017.title": "Innovation & Excellence",
+    "aboutUs.2017.desc": "Nijara introduced cutting-edge 3D visualization technology and innovative design solutions, setting new industry standards.",
+    "aboutUs.2017.ach1": "Integration of 3D modeling software",
+    "aboutUs.2017.ach2": "Launch of 3D model rental service",
+    "aboutUs.2017.ach3": "Team growth to 25 professionals",
+    "aboutUs.2017.ach4": "Client base growth to 30 companies",
+    "aboutUs.2018.title": "Global Reach & Recognition",
+    "aboutUs.2018.desc": "Nijara's reputation for excellence grew internationally, securing projects across the Middle East, Europe, and Asia.",
+    "aboutUs.2018.ach1": "Expansion to international markets",
+    "aboutUs.2018.ach2": "Partnership with global brands",
+    "aboutUs.2018.ach3": "Team growth to 35 professionals",
+    "aboutUs.2018.ach4": "Client base growth to 40 companies",
+    "aboutUs.2019.title": "Sustainability & Responsibility",
+    "aboutUs.2019.desc": "Nijara committed to sustainable practices and environmental responsibility, becoming a leader in eco-friendly exhibition design.",
+    "aboutUs.2019.ach1": "Implementation of sustainable materials",
+    "aboutUs.2019.ach2": "Launch of eco-friendly rental equipment",
+    "aboutUs.2019.ach3": "Team growth to 40 professionals",
+    "aboutUs.2019.ach4": "Client base growth to 50 companies",
+    "aboutUs.2020.title": "Digital Transformation",
+    "aboutUs.2020.desc": "Nijara embraced digital tools and platforms for efficient project management and client communication.",
+    "aboutUs.2020.ach1": "Adoption of cloud-based project management tools",
+    "aboutUs.2020.ach2": "Launch of online 3D model library",
+    "aboutUs.2020.ach3": "Team growth to 45 professionals",
+    "aboutUs.2020.ach4": "Client base growth to 60 companies",
+    "aboutUs.2021.title": "Innovation & Excellence",
+    "aboutUs.2021.desc": "Nijara continued to innovate and push boundaries, setting new standards in exhibition design and event management.",
+    "aboutUs.2021.ach1": "Launch of AI-powered design optimization",
+    "aboutUs.2021.ach2": "Integration of AR/VR technology for immersive experiences",
+    "aboutUs.2021.ach3": "Team growth to 50 professionals",
+    "aboutUs.2021.ach4": "Client base growth to 70 companies",
+    "aboutUs.2022.title": "Sustainability & Responsibility",
+    "aboutUs.2022.desc": "Nijara remained committed to sustainability and environmental responsibility, expanding its reach and impact.",
+    "aboutUs.2022.ach1": "Expansion to new markets (Africa, Latin America)",
+    "aboutUs.2022.ach2": "Partnership with international NGOs",
+    "aboutUs.2022.ach3": "Team growth to 55 professionals",
+    "aboutUs.2022.ach4": "Client base growth to 80 companies",
+    "aboutUs.2023.title": "Innovation & Excellence",
+    "aboutUs.2023.desc": "Nijara continued to innovate and push boundaries, setting new standards in exhibition design and event management.",
+    "aboutUs.2023.ach1": "Launch of AI-powered design optimization",
+    "aboutUs.2023.ach2": "Integration of AR/VR technology for immersive experiences",
+    "aboutUs.2023.ach3": "Team growth to 60 professionals",
+    "aboutUs.2023.ach4": "Client base growth to 90 companies",
+
+
+    "client.our": "OUR",
+    "client.clients": "CLIENTS",
+    // Our Work Section (ProjectsSection)
+    "projectsSection.our": "OUR",
+    "projectsSection.projects": "PROJECTS",
+    "projectsSection.subtitle": "Explore our portfolio across three main categories of excellence",
+    "projectsSection.exhibition": "Exhibition Design",
+    "projectsSection.interior": "Interior Fit-Out",
+    "projectsSection.booth": "Trade Show Booth",
+    "projectsSection.management": "Management",
+    "projectsSection.projectsLabel": "projects",
+    "projectsSection.viewGallery": "View Gallery",
+    "projectsSection.showMore": "Show More",
+    "projectsSection.showLess": "Show Less",
+    "projectsSection.category.exhibitiondesign": "Exhibition Design",
+    "projectsSection.category.interiorfit-out": "Interior Fit-Out",
+    "projectsSection.category.tradeshowbooth": "Trade Show Booth",
+    "projectsSection.category.management": "Management",
+
+    // ProjectDisplay
+    "projectDisplay.project": "Project",
+    "projectDisplay.gallery": "Gallery",
+    "projectDisplay.clickToView": "Click on any project below to view its gallery and details",
+    // Login Error Messages
+    "login.error.emailRequired": "Email is required",
+    "login.error.invalidEmail": "Invalid email format",
+    "login.error.passwordRequired": "Password is required",
+    "login.error.passwordShort": "Password must be at least 6 characters",
+    "login.error.invalidCredentials": "Invalid credentials",
+    // Login Page UI
+    "login.backToHome": "Back to Home",
+    "login.title": "Access Portal",
+    "login.subtitle": "Welcome back to Nijara",
+    "login.google": "Sign in with Google",
+    "login.googleLoading": "Signing in...",
+    "login.orEmail": "Or continue with email",
+    "login.emailLabel": "Email Address",
+    "login.emailPlaceholder": "Enter your email",
+    "login.passwordLabel": "Password",
+    "login.passwordPlaceholder": "Enter your password",
+    "login.rememberMe": "Remember me",
+    "login.forgotPassword": "Forgot password?",
+    "login.loading": "Accessing...",
+    "login.submit": "Access Network",
+    "login.noAccount": "Don't have an account?",
+    "login.registerLink": "Join Nijara",
+    // Register Page UI
+    "register.backToHome": "Back to Home",
+    "register.title": "Join Nijara",
+    "register.subtitle": "Create your digital identity",
+    "register.google": "Sign up with Google",
+    "register.googleLoading": "Creating account...",
+    "register.orEmail": "Or create account with email",
+    "register.usernameLabel": "Username",
+    "register.usernamePlaceholder": "Choose a username",
+    "register.emailLabel": "Email Address",
+    "register.emailPlaceholder": "Enter your email",
+    "register.passwordLabel": "Password",
+    "register.passwordPlaceholder": "Create a password",
+    "register.confirmPasswordLabel": "Confirm Password",
+    "register.confirmPasswordPlaceholder": "Confirm your password",
+    "register.passwordStrength": "Password Strength",
+    "register.weak": "Weak",
+    "register.medium": "Medium",
+    "register.strong": "Strong",
+    "register.submit": "Create Account",
+    "register.haveAccount": "Already have an account?",
+    "register.loginLink": "Access Portal",
+    // Register Error Messages
+    "register.error.usernameRequired": "Username is required",
+    "register.error.usernameShort": "Username must be at least 3 characters",
+    "register.error.emailRequired": "Email is required",
+    "register.error.invalidEmail": "Invalid email format",
+    "register.error.passwordRequired": "Password is required",
+    "register.error.passwordShort": "Password must be at least 8 characters",
+    "register.error.confirmPasswordRequired": "Please confirm your password",
+    "register.error.passwordsNoMatch": "Passwords do not match",
+    "register.error.failed": "Registration failed",
+  },
+  ar: {
+    "hero.title": "نحن",
+    "hero.title2": "نفعله",
+    "client.our": "عملاؤنا",
+    "client.clients": "",
+    // Navigation
+    "nav.HomePage": " نجارة "  ,
+    "nav.work": "أعمالنا",
+    "nav.models": "النماذج ثلاثية الأبعاد",
+    "nav.rental": "كتالوج الإيجار",
+    "nav.team": "فريقنا",
+    "nav.clients": "العملاء",
+    "nav.contact": "اتصل بنا",
+    "nav.login": "تسجيل الدخول",
+    "nav.signup": "إنشاء حساب",
+    "nav.requestDesign": "طلب تصميم",
+    "nav.logout": "تسجيل الخروج",
+    "nav.whatWeDo": "ماذا نفعل",
+
+    // Hero Section
+    "hero.subtitle": "تصميم المعارض",
+    "hero.title1": "تجارب",
+   
+    "hero.title3": "المعاد تعريفها",
+    "hero.description":
+      "شريكك في تصميم المعارض، وتجهيز الديكورات الداخلية، وتجربة الفعاليات",
+    "hero.cta": "استكشف النماذج ثلاثية الأبعاد",
+
+    // Services Section
+    "services.subtitle": "خبرتنا",
+    "services.title1": "ماذا",
+    "services.title2": "نفعل",
+    "services.title3": "",
+    "services.exhibition": "تصميم وبناء وتنفيذ أجنحة المعارض",
+    "services.tradeshows": "المعارض والمؤتمرات والفعاليات",
+    "services.interior": "تصميم داخلي وتجهيز",
+    "services.strategy": "الاستراتيجية والإدارة والتفعيل",
+    "services.exhibition.title": "تصميم المعارض",
+    "services.exhibition.description": "أجنحة معارض مخصصة تأسر وتشرك جمهورك بتصميم مكاني مبتكر.",
+    "services.interior.title": "التجهيزات الداخلية",
+    "services.interior.description": "حلول داخلية شاملة للمساحات التجارية والتجزئة التي تعكس هوية علامتك التجارية.",
+    "services.event.title": "إدارة الفعاليات",
+    "services.event.description": "خدمات تخطيط وتنفيذ الفعاليات من البداية إلى النهاية لتجارب علامة تجارية لا تُنسى.",
+
+    // 3D Models Section
+    "models.subtitle": "نماذج المعارض ثلاثية الأبعاد",
+    "models.title1": "معاينات",
+    "models.title2": "ثلاثية الأبعاد تفاعلية",
+    "models.description":
+      "استكشف تصاميم معارضنا في بيئة ثلاثية الأبعاد غامرة. قم بالدوران والتكبير والتفاعل مع النماذج التفصيلية لأعمالنا.",
+    "models.selectModel": "اختر النموذج",
+    "models.controls": "عناصر التحكم ثلاثية الأبعاد",
+    "models.autoRotate": "الدوران التلقائي",
+    "models.mouseControls": "عناصر تحكم الماوس",
+    "models.on": "تشغيل",
+    "models.off": "إيقاف",
+    "models.navigation": "كيفية التنقل",
+    "models.leftClick": "النقر الأيسر + السحب للدوران",
+    "models.rightClick": "النقر الأيمن + السحب للتحريك",
+    "models.scroll": "عجلة التمرير للتكبير",
+    "models.cta": "مستعد لإحياء رؤيتك في ثلاثة أبعاد؟",
+    "models.ctaButton": "طلب تصور ثلاثي الأبعاد",
+
+    // Portfolio Section
+    "portfolio.subtitle": "معرض الأعمال",
+    "portfolio.title1": "أحدث",
+    "portfolio.title2": "مشاريعنا",
+    "portfolio.viewProject": "عرض المشروع",
+
+    // Stats Section
+    "stats.projects": "المشاريع المكتملة",
+    "stats.experience": "سنوات الخبرة",
+    "stats.clients": "العملاء السعداء",
+    "stats.team": "أعضاء الفريق",
+
+    // Team Section
+    "team.subtitle": "فريقنا",
+    "team.subtitle2": "",
+
+    "team.title1": "تعرف على",
+    "team.title2": "خبرائنا",
+    "team.description":
+      "فريقنا المتنوع من المحترفين المبدعين يجمع عقودًا من الخبرة في تصميم المعارض والهندسة المعمارية وإدارة المشاريع.",
+    "team.allDepartments": "جميع الأقسام",
+    "team.leadership": "القيادة",
+    "team.design": "التصميم",
+    "team.technology": "التكنولوجيا",
+    "team.operations": "العمليات",
+    "team.business": "الأعمال",
+    "team.featured": "الفريق المميز",
+    "team.allTeam": "جميع الفريق",
+    "team.yearsExp": "سنوات خبرة",
+    "team.email": "البريد الإلكتروني",
+    "team.linkedin": "لينكد إن",
+    "team.phone": "الهاتف",
+    "team.joinTeam": "انضم إلى فريقنا",
+    "team.joinDescription": "نحن نبحث دائمًا عن أفراد موهوبين للانضمام إلى فريقنا المتنامي.",
+    "team.viewCareers": "عرض الفرص الوظيفية",
+
+    // Clients Section
+    "clients.subtitle": "عملاؤنا",
+    "clients.title1": "موثوق من قبل",
+    "clients.title2": "قادة الصناعة",
+    "clients.description": "لقد حظينا بشرف العمل مع بعض أكثر العلامات التجارية والمؤسسات المرموقة عبر مختلف الصناعات.",
+    "clients.allIndustries": "جميع الصناعات",
+    "clients.aviation": "الطيران",
+    "clients.government": "الحكومة",
+    "clients.energy": "الطاقة",
+    "clients.events": "الفعاليات",
+    "clients.technology": "التكنولوجيا",
+    "clients.healthcare": "الرعاية الصحية",
+    "clients.featured": "العملاء المميزون",
+    "clients.allClients": "جميع العملاء",
+    "clients.partnership": "شراكة منذ",
+    "clients.projectValue": "قيمة المشروع",
+    "clients.becomePartner": "كن شريكًا",
+    "clients.partnerDescription": "انضم إلى شبكة عملائنا الراضين واختبر التميز في تصميم المعارض.",
+    "clients.getStarted": "ابدأ اليوم",
+
+    // Contact Section
+    "contact.title1": "مستعد لإنشاء",
+    "contact.title2": "شيء مذهل؟",
+    "contact.description":
+      "دعنا نناقش معرضك القادم أو مشروع التصميم الداخلي أو الحدث. فريقنا مستعد لإحياء رؤيتك بالتصور ثلاثي الأبعاد المتطور ومعدات الإيجار المتميزة.",
+    "contact.startProject": "ابدأ مشروعك",
+    "contact.browseCatalog": "تصفح مشاريعنا",
+
+    // Footer
+    "footer.description": "إنشاء تجارب استثنائية من خلال التصميم المبتكر والتنفيذ الاستثنائي منذ عام 2006.",
+    "footer.services": "الخدمات",
+    "footer.company": "الشركة",
+    "footer.contact": "اتصل بنا",
+    "footer.copyright": "© جميع الحقوق محفوظة . نجارة 2025  ",
+    "footer.exhibition": "تصميم المعارض",
+    "footer.interior": "التجهيزات الداخلية",
+    "footer.event": "إدارة الفعاليات",
+    "footer.tradeshow": "معارض التجارية",
+    "footer.about": "معلومات عنا",
+    "footer.projects": "المشاريع",
+    "footer.team": "فريقنا",
+    "footer.downloadProfile": "تحميل ملف الشركة",
+    "footer.careers": "الوظائف",
+    "footer.address": "Gulf Leighton Compound - 9B St - القوز - منطقة القوز الصناعية 4 - دبي - الإمارات العربية المتحدة",
+    "footer.phone": "+971 4 3415581",
+    "footer.email": "info@nijara.com",
+    "footer.whatwedo": "ماذا نفعل",
+
+    // Request Design Form
+    "requestDesign.title": "طلب تصميم",
+    "requestDesign.subtitle": "استشارة المشروع",
+    "requestDesign.description": "أخبرنا عن مشروعك ودع خبراءنا ينشئون الحل التصميمي المثالي لك.",
+    "requestDesign.name": "الاسم الكامل",
+    "requestDesign.namePlaceholder": "أدخل اسمك الكامل",
+    "requestDesign.company": "الشركة",
+    "requestDesign.companyPlaceholder": "اسم الشركة ",
+    "requestDesign.phone": "رقم الهاتف",
+    "requestDesign.phonePlaceholder": "أدخل رقم هاتفك",
+    "requestDesign.email": "عنوان البريد الإلكتروني",
+    "requestDesign.emailPlaceholder": "أدخل عنوان بريدك الإلكتروني",
+    "requestDesign.eventType": "نوع الحدث/المشروع",
+    "requestDesign.eventTypePlaceholder": "اختر نوع الحدث",
+    "requestDesign.eventDate": "تاريخ الحدث",
+    "requestDesign.eventDatePlaceholder": "اختر تاريخ الحدث",
+  
+    "requestDesign.descriptionPlaceholder": "صف متطلبات مشروعك وأهدافه وأي تفاصيل محددة...",
+    "requestDesign.fileUpload": "رفع الملفات",
+    "requestDesign.fileUploadDescription": "ارفع الصور المرجعية أو مخططات الأرضية أو أي مستندات ذات صلة",
+    "requestDesign.dragDrop": "اسحب وأفلت الملفات هنا، أو انقر للتصفح",
+    "requestDesign.fileTypes": "التنسيقات المدعومة: PDF، JPG، PNG، DOC، DOCX (حد أقصى 10 ميجابايت لكل ملف)",
+    "requestDesign.submit": "إرسال الطلب",
+    "requestDesign.submitting": "جاري الإرسال...",
+    "requestDesign.success": "تم إرسال الطلب بنجاح! سنعاود الاتصال بك خلال 24 ساعة.",
+    "requestDesign.error": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+
+    // Event Types
+    "eventTypes.exhibition": "جناح معرض",
+    "eventTypes.conference": "مؤتمر",
+    "eventTypes.tradeShow": "معرض تجاري",
+    "eventTypes.corporate": "حدث مؤسسي",
+    "eventTypes.retail": "مساحة تجزئة",
+    "eventTypes.museum": "عرض متحف",
+    "eventTypes.showroom": "صالة عرض",
+    "eventTypes.other": "أخرى",
+
+    // Common
+    "common.loading": "جاري التحميل...",
+    "common.error": "خطأ",
+    "common.success": "نجح",
+    "common.cancel": "إلغاء",
+    "common.save": "حفظ",
+    "common.edit": "تعديل",
+    "common.delete": "حذف",
+    "common.view": "عرض",
+    "common.close": "إغلاق",
+    "common.next": "التالي",
+    "common.previous": "السابق",
+    "common.required": "مطلوب",
+    "common.optional": "اختياري",
+
+    // Who We Are Section
+    "whoWeAre.title1": "من",
+    "whoWeAre.title2": "نحن",
+    "whoWeAre.title3": "",
+    "whoWeAre.designExcellence": "مركز التميز في التصميم",
+    "whoWeAre.customerOriented": "موجه نحو العميل",
+    "whoWeAre.reliablePartner": "شريك موثوق",
+    "whoWeAre.timeBound": "ملتزمون بالوقت",
+
+    // About Us Section
+    "aboutUs.ourJourney": "رحلتنا",
+    "aboutUs.about": " حول ",
+    "aboutUs.nijara": "نجارة",
+    "aboutUs.intro": "تأسست نجارة في عام 2006، وهي وكالة رائدة في تصميم أجنحة المعارض، وتجهيز المساحات الداخلية، وتنظيم الفعاليات. تتخصص في إنشاء أجنحة معارض مذهلة وموفرة للتكاليف، وتنظيم فعاليات مبتكرة ومؤتمرات. كما تقدم نيجارا حلول تجهيز كاملة للمكاتب، والمساكن الخاصة، والمناسبات الخاصة، باستخدام أجود المواد وتصاميم مخصصة لتحقيق رؤية العملاء بدقة.",
+    "aboutUs.2015.title": "التأسيس والرؤية",
+    "aboutUs.2015.desc": "تأسست نجارة برؤية واضحة لإحداث ثورة في صناعة المعارض والفعاليات في الشرق الأوسط.",
+    "aboutUs.2015.ach1": "تأسيس الشركة في دبي",
+    "aboutUs.2015.ach2": "أول مشروع تصميم معرض",
+    "aboutUs.2015.ach3": "فريق من 5 محترفين مبدعين",
+    "aboutUs.2015.ach4": "قاعدة عملاء أولية من 10 شركات",
+    "aboutUs.2016.title": "Expansion & Growth",
+    "aboutUs.2016.desc": "Nijara expanded its operations to include interior design and event management, establishing a comprehensive service offering.",
+    "aboutUs.2016.ach1": "Expansion to new office in Dubai",
+    "aboutUs.2016.ach2": "Launch of interior design department",
+    "aboutUs.2016.ach3": "Team growth to 15 professionals",
+    "aboutUs.2016.ach4": "Client base growth to 20 companies",
+    "aboutUs.2017.title": "Innovation & Excellence",
+    "aboutUs.2017.desc": "Nijara introduced cutting-edge 3D visualization technology and innovative design solutions, setting new industry standards.",
+    "aboutUs.2017.ach1": "Integration of 3D modeling software",
+    "aboutUs.2017.ach2": "Launch of 3D model rental service",
+    "aboutUs.2017.ach3": "Team growth to 25 professionals",
+    "aboutUs.2017.ach4": "Client base growth to 30 companies",
+    "aboutUs.2018.title": "Global Reach & Recognition",
+    "aboutUs.2018.desc": "Nijara's reputation for excellence grew internationally, securing projects across the Middle East, Europe, and Asia.",
+    "aboutUs.2018.ach1": "Expansion to international markets",
+    "aboutUs.2018.ach2": "Partnership with global brands",
+    "aboutUs.2018.ach3": "Team growth to 35 professionals",
+    "aboutUs.2018.ach4": "Client base growth to 40 companies",
+    "aboutUs.2019.title": "Sustainability & Responsibility",
+    "aboutUs.2019.desc": "Nijara committed to sustainable practices and environmental responsibility, becoming a leader in eco-friendly exhibition design.",
+    "aboutUs.2019.ach1": "Implementation of sustainable materials",
+    "aboutUs.2019.ach2": "Launch of eco-friendly rental equipment",
+    "aboutUs.2019.ach3": "Team growth to 40 professionals",
+    "aboutUs.2019.ach4": "Client base growth to 50 companies",
+    "aboutUs.2020.title": "Digital Transformation",
+    "aboutUs.2020.desc": "Nijara embraced digital tools and platforms for efficient project management and client communication.",
+    "aboutUs.2020.ach1": "Adoption of cloud-based project management tools",
+    "aboutUs.2020.ach2": "Launch of online 3D model library",
+    "aboutUs.2020.ach3": "Team growth to 45 professionals",
+    "aboutUs.2020.ach4": "Client base growth to 60 companies",
+    "aboutUs.2021.title": "Innovation & Excellence",
+    "aboutUs.2021.desc": "Nijara continued to innovate and push boundaries, setting new standards in exhibition design and event management.",
+    "aboutUs.2021.ach1": "Launch of AI-powered design optimization",
+    "aboutUs.2021.ach2": "Integration of AR/VR technology for immersive experiences",
+    "aboutUs.2021.ach3": "Team growth to 50 professionals",
+    "aboutUs.2021.ach4": "Client base growth to 70 companies",
+    "aboutUs.2022.title": "Sustainability & Responsibility",
+    "aboutUs.2022.desc": "Nijara remained committed to sustainability and environmental responsibility, expanding its reach and impact.",
+    "aboutUs.2022.ach1": "Expansion to new markets (Africa, Latin America)",
+    "aboutUs.2022.ach2": "Partnership with international NGOs",
+    "aboutUs.2022.ach3": "Team growth to 55 professionals",
+    "aboutUs.2022.ach4": "Client base growth to 80 companies",
+    "aboutUs.2023.title": "Innovation & Excellence",
+    "aboutUs.2023.desc": "Nijara continued to innovate and push boundaries, setting new standards in exhibition design and event management.",
+    "aboutUs.2023.ach1": "Launch of AI-powered design optimization",
+    "aboutUs.2023.ach2": "Integration of AR/VR technology for immersive experiences",
+    "aboutUs.2023.ach3": "Team growth to 60 professionals",
+    "aboutUs.2023.ach4": "Client base growth to 90 companies",
+    // Our Work Section (ProjectsSection)
+    "projectsSection.our": "أعمال",
+    "projectsSection.projects": "مشاريع",
+    "projectsSection.subtitle": "استكشف مجموعتنا عبر ثلاث فئات رئيسية من التميز",
+    "projectsSection.exhibition": "تصميم المعارض",
+    "projectsSection.interior": "التجهيزات الداخلية",
+    "projectsSection.booth": "جناح المعرض التجاري",
+    "projectsSection.management": "الإدارة",
+    "projectsSection.projectsLabel": "مشروع",
+    "projectsSection.viewGallery": "عرض المعرض",
+    "projectsSection.showMore": "عرض المزيد",
+    "projectsSection.showLess": "عرض أقل",
+    "projectsSection.category.exhibitiondesign": "تصميم المعارض",
+    "projectsSection.category.interiorfit-out": "التجهيزات الداخلية",
+    "projectsSection.category.tradeshowbooth": "جناح المعرض التجاري",
+    "projectsSection.category.management": "الإدارة",
+
+    // ProjectDisplay
+    "projectDisplay.project": "مشروع",
+    "projectDisplay.gallery": "معرض",
+    "projectDisplay.clickToView": "انقر على أي مشروع أدناه لعرض معرضه وتفاصيله",
+    // Login Error Messages
+    "login.error.emailRequired": "البريد الإلكتروني مطلوب",
+    "login.error.invalidEmail": "تنسيق البريد الإلكتروني غير صالح",
+    "login.error.passwordRequired": "كلمة المرور مطلوبة",
+    "login.error.passwordShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+    "login.error.invalidCredentials": "بيانات الاعتماد غير صحيحة",
+    // Login Page UI
+    "login.backToHome": "العودة إلى الصفحة الرئيسية",
+    "login.title": "بوابة الدخول",
+    "login.subtitle": "مرحبًا بك في نجارة",
+    "login.google": "تسجيل الدخول عبر جوجل",
+    "login.googleLoading": "جاري تسجيل الدخول...",
+    "login.orEmail": "أو تابع باستخدام البريد الإلكتروني",
+    "login.emailLabel": "البريد الإلكتروني",
+    "login.emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "login.passwordLabel": "كلمة المرور",
+    "login.passwordPlaceholder": "أدخل كلمة المرور",
+    "login.rememberMe": "تذكرني",
+    "login.forgotPassword": "نسيت كلمة المرور؟",
+    "login.loading": "جاري الدخول...",
+    "login.submit": "تسجيل الدخول",
+    "login.noAccount": "ليس لديك حساب؟",
+    "login.registerLink": "انضم إلى نجارة",
+    // Register Page UI
+    "register.backToHome": "العودة إلى الصفحة الرئيسية",
+    "register.title": "انضم إلى نجارة",
+    "register.subtitle": "أنشئ هويتك الرقمية",
+    "register.google": "التسجيل عبر جوجل",
+    "register.googleLoading": "جاري إنشاء الحساب...",
+    "register.orEmail": "أو أنشئ حسابًا باستخدام البريد الإلكتروني",
+    "register.usernameLabel": "اسم المستخدم",
+    "register.usernamePlaceholder": "اختر اسم مستخدم",
+    "register.emailLabel": "البريد الإلكتروني",
+    "register.emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "register.passwordLabel": "كلمة المرور",
+    "register.passwordPlaceholder": "أنشئ كلمة مرور",
+    "register.confirmPasswordLabel": "تأكيد كلمة المرور",
+    "register.confirmPasswordPlaceholder": "أكد كلمة المرور",
+    "register.passwordStrength": "قوة كلمة المرور",
+    "register.weak": "ضعيف",
+    "register.medium": "متوسط",
+    "register.strong": "قوي",
+    "register.submit": "إنشاء حساب",
+    "register.haveAccount": "لديك حساب بالفعل؟",
+    "register.loginLink": "بوابة الدخول",
+    // Register Error Messages
+    "register.error.usernameRequired": "اسم المستخدم مطلوب",
+    "register.error.usernameShort": "يجب أن يكون اسم المستخدم 3 أحرف على الأقل",
+    "register.error.emailRequired": "البريد الإلكتروني مطلوب",
+    "register.error.invalidEmail": "تنسيق البريد الإلكتروني غير صالح",
+    "register.error.passwordRequired": "كلمة المرور مطلوبة",
+    "register.error.passwordShort": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+    "register.error.confirmPasswordRequired": "يرجى تأكيد كلمة المرور",
+    "register.error.passwordsNoMatch": "كلمتا المرور غير متطابقتين",
+    "register.error.failed": "فشل التسجيل",
+  },
+}
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const [language, setLanguage] = useState<Language>("en")
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language") as Language
+    if (savedLanguage && (savedLanguage === "en" || savedLanguage === "ar")) {
+      setLanguage(savedLanguage)
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem("language", language)
+    document.documentElement.lang = language
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr"
+  }, [language])
+
+  const t = (key: string): string => {
+    const value = translations[language][key];
+    return value !== undefined ? value : key;
+  }
+
+  const isRTL = language === "ar"
+
+  return <LanguageContext.Provider value={{ language, setLanguage, t, isRTL }}>{children}</LanguageContext.Provider>
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext)
+  if (context === undefined) {
+    throw new Error("useLanguage must be used within a LanguageProvider")
+  }
+  return context
+}
