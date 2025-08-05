@@ -66,10 +66,10 @@ export default function Header({
       }}
     >
       <div className="container mx-auto px-6 py-6">
-        <div className="flex items-center justify-between flex-col sm:flex-row">
+        <div className="flex items-center justify-between">
           {/* Logo */}
           <motion.div
-            className="flex items-center"
+            className="flex items-center flex-shrink-0"
             whileHover={{
               scale: 1.05,
               rotateY: 10,
@@ -79,17 +79,16 @@ export default function Header({
             style={{ transformStyle: "preserve-3d" }}
           >
             <motion.div
-              className="w-52 h-20 text-gray-900 rounded-sm flex items-center justify-center font-bold text-lg"
-              
+              className="w-28 h-28 sm:w-52 sm:h-20 text-gray-900 rounded-sm flex items-center justify-center font-bold text-lg"
               transition={{ duration: 0.9, ease: "linear" }}
               style={{ transformStyle: "preserve-3d" }}
             >
               <Image
                 src="/nijara_logo_rev.webp"
                 alt="Logo"
-                width={60}
-                height={60}
-                className="size-fit"
+                width={100}
+                height={100}
+                className="w-28 h-28 sm:w-52 sm:h-20 object-cover"
                 priority
               />
             </motion.div>
@@ -128,7 +127,7 @@ export default function Header({
           </nav>
 
           {/* Right side buttons */}
-          <div className={`flex items-center ${isRTL ? "space-x-reverse space-x-2" : "space-x-2"}`}>
+          <div className={`flex items-center ${isRTL ? "space-x-reverse space-x-1" : "space-x-1"}`}>
             <LanguageSwitcher />
             {isLoggedIn ? (
               <div className="flex items-center space-x-2">
@@ -186,7 +185,7 @@ export default function Header({
               <Button
                 variant="ghost"
                 size="sm"
-                className={`lg:hidden ${isRTL ? "mr-4" : "ml-4"}`}
+                className={`lg:hidden ${isRTL ? "mr-3" : "ml-3"}`}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {isMenuOpen ? (
