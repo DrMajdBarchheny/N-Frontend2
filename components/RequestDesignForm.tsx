@@ -147,9 +147,9 @@ export default function RequestDesignForm({ isOpen, onClose }: RequestDesignForm
       newErrors.eventType = t("common.required")
     }
 
-    if (!formData.eventDate) {
-      newErrors.eventDate = t("common.required")
-    }
+    // if (!formData.eventDate) {
+    //   newErrors.eventDate = t("common.required")
+    // }
 
     if (!formData.description.trim()) {
       newErrors.description = t("common.required")
@@ -345,7 +345,7 @@ export default function RequestDesignForm({ isOpen, onClose }: RequestDesignForm
       // Get auth token if present
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
 
-      await axios.post('https://n-backend-gamma.vercel.app/api/design-request/', formDataToSend, {
+      await axios.post('http://localhost:8000/api/design-request/', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
           ...(token ? { 'Authorization': `Token ${token}` } : {}),
@@ -602,7 +602,7 @@ export default function RequestDesignForm({ isOpen, onClose }: RequestDesignForm
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
                   <label className="block text-sm font-medium text-white mb-2">
                     <Calendar className="h-4 w-4 inline mr-2" />
-                    {t("requestDesign.eventDate")} <span className="text-red-400">*</span>
+                    {t("requestDesign.eventDate")} {/* <span className="text-red-400">*</span> */}
                   </label>
                   <Input
                     type="date"
@@ -610,7 +610,7 @@ export default function RequestDesignForm({ isOpen, onClose }: RequestDesignForm
                     onChange={(e) => handleInputChange("eventDate", e.target.value)}
                     className={`bg-gray-800 border-gray-600 text-white ${errors.eventDate ? "border-red-500" : ""}`}
                   />
-                  {errors.eventDate && <p className="text-red-400 text-sm mt-1">{errors.eventDate}</p>}
+                  {/* {errors.eventDate && <p className="text-red-400 text-sm mt-1">{errors.eventDate}</p>} */}
                 </motion.div>
               </div>
 

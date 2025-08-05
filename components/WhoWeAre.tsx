@@ -41,6 +41,8 @@ const features = [
 export default function WhoWeAre() {
   const { t } = useLanguage();
   const [isMounted, setIsMounted] = useState(false);
+  const [glowX, setGlowX] = useState(60); // X coordinate (0-100)
+  const [glowY, setGlowY] = useState(1); // Y coordinate (0-100)
 
   // Ensure client-side only rendering for interactive elements
   useEffect(() => {
@@ -135,12 +137,12 @@ export default function WhoWeAre() {
                   // "radial-gradient(circle at 60% 20%, rgba(233, 123, 0, 0.3) 0%, rgba(233, 123, 0, 0.1) 30%, transparent 70%)",
                   // "radial-gradient(circle at 60% 20%, rgba(233, 123, 0, 0) 0%, transparent 70%)",
                   
-                  // Option 1: Center glow (current)
-                  "radial-gradient(circle at center, rgba(233, 123, 0, 0) 0%, transparent 70%)",
-                  "radial-gradient(circle at center, rgba(233, 123, 0, 0.3) 0%, rgba(233, 123, 0, 0.1) 30%, transparent 70%)",
-                  "radial-gradient(circle at center, rgba(233, 123, 0, 0.6) 0%, rgba(233, 123, 0, 0.2) 40%, transparent 70%)",
-                  "radial-gradient(circle at center, rgba(233, 123, 0, 0.3) 0%, rgba(233, 123, 0, 0.1) 30%, transparent 70%)",
-                  "radial-gradient(circle at center, rgba(233, 123, 0, 0) 0%, transparent 70%)",
+                  // Option 1: Bulb center glow (positioned at bulb center)
+                  // `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(233, 123, 0, 0) 0%, transparent 90%)`,
+                  // `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(233, 123, 0, 0.3) 0%, rgba(233, 123, 0, 0.1) 40%, transparent 90%)`,
+                  // `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(233, 123, 0, 0.6) 0%, rgba(233, 123, 0, 0.2) 50%, transparent 90%)`,
+                  // `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(233, 123, 0, 0.3) 0%, rgba(233, 123, 0, 0.1) 40%, transparent 90%)`,
+                  // `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(233, 123, 0, 0) 0%, transparent 90%)`,
                   
                   // Option 2: Bottom glow
                   // "radial-gradient(circle at bottom, rgba(233, 123, 0, 0) 0%, transparent 70%)",
@@ -195,7 +197,7 @@ export default function WhoWeAre() {
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{
                   duration: 0.9,
-                  delay: 4.5 + (idx * 0.8), // Start after picture completes full motion
+                  delay: 3.2 + (idx * 0.35), // Lowered delay for faster appearance
                   ease: "easeOut",
                 }}
                 whileHover={{ scale: 1.04 }}
