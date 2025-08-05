@@ -17,10 +17,10 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { handleGoogleLoginData } from "@/lib/redux/actions";
 
-const BACKGROUND_ELEMENTS = Array.from({ length: 8 }, (_, i) => ({
+const BACKGROUND_ELEMENTS = Array.from({ length: 24 }, (_, i) => ({
   id: i,
-  left: (i * 20 + 10) % 100,
-  top: (i * 25 + 15) % 100,
+  left: Math.random() * 90 + 5, // Random between 5% and 95%
+  top: Math.random() * 90 + 5, // Random between 5% and 95%
   delay: i * 0.2,
   duration: 4 + (i % 2),
 }));
